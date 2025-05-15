@@ -1,0 +1,15 @@
+# Dockerfile.dev
+FROM node:18
+
+# 앱 디렉토리 설정
+WORKDIR /app
+
+# 종속성 먼저 설치
+COPY package*.json ./
+RUN npm install
+
+# 코드 복사
+COPY . .
+
+# 개발 모드 실행
+CMD ["npm", "run", "start:dev"]

@@ -1,0 +1,31 @@
+# 📦 패키지 매니저
+node_modules/
+.pnpm/
+
+# 🛠 NestJS 빌드 산출물
+dist/
+*.js
+*.js.map
+
+# 🧪 테스트 & 로그
+coverage/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# 💼 환경변수
+.env
+.env.local
+.env.*.local
+
+# 🐳 Docker 관련
+*.local
+docker-compose.override.yml
+
+# VSCode 등 에디터 설정
+.vscode/
+.idea/
+.DS_Store
+
+# OS 파일
+Thumbs.db
