@@ -50,6 +50,7 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - "3001:3000"
+      - "30001:50051"
     volumes:
       - ./apps/auth:/app
       - /app/node_modules
@@ -62,6 +63,7 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - "3002:3000"
+      - "30002:50051"
     volumes:
       - ./apps/event:/app
       - /app/node_modules
