@@ -1,21 +1,38 @@
 services:
   mongodb:
     image: mongo
-    ports: ["27017:27017"]
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
 
   redis:
     image: redis
-    ports: ["6379:6379"]
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
 
   kafka:
     image: bitnami/kafka:latest
-    ports: ["9092:9092"]
+    container_name: kafka
+    ports:
+      - "9092:9092"
     environment:
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
       - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
-  zookeeper:
-    image: bitnami/zookeeper:latest
-    ports: ["2181:2181"]
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
     
   gateway:
     build:
@@ -23,20 +40,38 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"
-    depends_on: [auth, event, redis]
+    volumes:
+      - ./apps/gateway:/app
+      - /app/node_modules
+    depends_on:
+      - auth
+      - event
+      - redis
 
   auth:
     build:
       context: ./apps/auth
       dockerfile: Dockerfile.dev
     ports:
-      - "3001:3001"
-    depends_on: [mongodb, redis]
+      - "3001:3000"
+    volumes:
+      - ./apps/auth:/app
+      - /app/node_modules
+    depends_on:
+      - mongodb
 
   event:
     build:
       context: ./apps/event
       dockerfile: Dockerfile.dev
     ports:
-      - "3002:3002"
-    depends_on: [kafka, redis, mongodb]
+      - "3002:3000"
+    volumes:
+      - ./apps/event:/app
+      - /app/node_modules
+    depends_on:
+      - mongodb
+      - kafka
+
+volumes:
+  mongo_data: {}
