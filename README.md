@@ -1,98 +1,104 @@
-# 넥슨 백엔드 채용 과제
+# MSA 서버 구축 과제
 
-## 🐳 실행 명령어 (Docker)
+> 본 프로젝트는 NestJS 기반 MSA 서버 구축 과제로, Gateway, Auth, Event 서비스 간 비동기 통신과 Kafka를 활용한 이벤트 기반 아키텍처를 다룹니다.
 
-### 1. 컨테이너 빌드 및 실행
+---
+
+## 📦 기술 스택
+
+| 구분     | 내용                                  |
+|--------|-------------------------------------|
+| 언어     | TypeScript (Node.js 기반)             |
+| 프레임워크  | NestJS (Microservices 구조)           |
+| 메시징    | Apache Kafka (Bitnami Docker Image) |
+| 데이터베이스 | MongoDB, Redis                      |
+| 인프라    | Docker, Docker Compose              |
+| 개발 환경  | WSL2, Node.js 18.x, pnpm            |
+| 기타     | REST API, Kafka Pub/Sub, MSA 구조 설계  |
+
+---
+
+## 🐳 Docker 실행 명령어
+
+> 아래 명령어들은 MSA 서버를 컨테이너 기반으로 띄우기 위한 명령어입니다.
+
+### 💻 빌드 및 실행
 
 ```bash
 docker compose up --build
 ```
 
-### 2. 캐시 없이 강제 재빌드
+### 🔄 캐시 무시 재빌드
 
 ```bash
 docker compose build --no-cache
 ```
 
-### 3. 백그라운드(Detached) 실행
+### 🔙 백그라운드 실행
 
 ```bash
 docker compose up -d
 ```
 
-### 4. 컨테이너 상태 확인
+---
 
-```bash
-docker compose ps
+## ⚙️ 개발 환경
+
+* OS: Windows 11 + WSL2 (Ubuntu 22.04)
+* Node.js: 18.x (npm, pnpm 모두 지원)
+* Docker: 24.x
+* DBeaver / MongoDB Compass / RedisInsight 권장
+
+---
+
+## 🧱 컨테이너 구성
+
+| 서비스     | 포트    | 설명                                  |
+|---------|-------|-------------------------------------|
+| gateway | 3000  | API Gateway (REST + Kafka Producer) |
+| auth    | 3001  | 인증 서비스                              |
+| event   | 3002  | 이벤트 소비 서비스 (Kafka Consumer)         |
+| kafka   | 9092  | Kafka 브로커 (Bitnami 이미지)             |
+| mongodb | 27017 | MongoDB                             |
+| redis   | 6379  | Redis                               |
+
+---
+
+## 🧭 시스템 구성도 (Mermaid)
+
+```mermaid
+graph TD
+  GW[Gateway]
+  AUTH[Auth Service]
+  EVENT[Event Service]
+  KAFKA[Kafka user_registered]
+  MONGO[MongoDB]
+  REDIS[Redis]
+
+  GW -->|POST /register| AUTH
+  AUTH -->|Kafka Publish| KAFKA
+  KAFKA -->|Consume| EVENT
+  EVENT --> MONGO
+  EVENT --> REDIS
 ```
 
-### 5. 컨테이너 중지
+---
+
+## 🚀 서비스 실행 예시
 
 ```bash
-docker compose down
-```
-
-### 6. 특정 서비스만 실행 (예: auth)
-
-```bash
+# 특정 서비스만 실행
 docker compose up auth
-```
 
-### 7. 컨테이너 + 네트워크 삭제
-
-```bash
-docker compose down 
-```
-
-### 8. 컨테이너 + 네트워크 + 볼륨 삭제
-
-```bash
-docker compose down -v
-```
-
-### 9. 컨테이너 + 네트워크 + 볼륨 + 이미지 삭제
-
-```bash
-docker compose down -v --rmi all
-```
-
-### 10. 컨테이너 로그 확인
-
-```bash
-docker compose logs -f
-```
-
-### 캐시 전부 삭제
-
-```bash
-docker builder prune --all --force
-docker system prune -a --volumes --force
-```
-
-## 패키지 설치 (npm 기준)
-
-기존에는 `pnpm`을 통해 패키지를 설치했지만, 다른 언어로 된 프레임워크(go, rust 등)와의 호환성 문제로 인해 `npm`으로 변경했습니다.
-
-### 1. 의존성 설치
-
-```bash
-pnpm install
-```
-
-### 2. Nest 앱 생성 (하위)
-
-```bash
-pnpm dlx nest generate app gateway
-```
-
-### 3. 개발 서버 실행
-
-```bash
+# gateway 개발 서버 실행
 pnpm --filter gateway run start:dev
 ```
 
-### 4. 빌드
+---
 
-```bash
-pnpm --filter gateway run build
-```
+## 🧠 아키텍처 설명 (추후 보강 예정)
+
+* MSA 구조에서 서비스 간 decoupling을 위해 Kafka 사용
+* 인증 후 이벤트를 발행하고, 이벤트 서비스에서 후속 처리 (DB 저장, 로깅 등)
+* API Gateway에서 요청을 라우팅하며 인증/요청/발행 책임 분리
+* Kafka를 사용함으로써 유저 응답 처리와 후속 작업을 비동기화
