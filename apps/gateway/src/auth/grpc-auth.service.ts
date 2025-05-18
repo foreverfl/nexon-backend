@@ -1,6 +1,8 @@
 import {
   LoginRequestDto,
   LoginResponseDto,
+  RefreshTokenRequestDto,
+  RefreshTokenResponseDto,
   RegisterRequestDto,
   RegisterResponseDto,
 } from "@/common/dto/auth.dto";
@@ -12,6 +14,9 @@ import { lastValueFrom, Observable } from "rxjs";
 interface GrpcAuthServiceClient {
   Register(data: RegisterRequestDto): Observable<RegisterResponseDto>;
   Login(data: LoginRequestDto): Observable<LoginResponseDto>;
+  RefreshToken(
+    data: RefreshTokenRequestDto,
+  ): Observable<RefreshTokenResponseDto>;
   Validate(data: { accessToken: string }): Observable<ValidateResponseDto>;
 }
 
@@ -32,6 +37,12 @@ export class GrpcAuthService implements OnModuleInit {
 
   async login(data: LoginRequestDto) {
     return lastValueFrom(this.grpcAuthService.Login(data));
+  }
+
+  async refreshToken(
+    data: RefreshTokenRequestDto,
+  ): Promise<RefreshTokenResponseDto> {
+    return lastValueFrom(this.grpcAuthService.RefreshToken(data));
   }
 
   async validateToken(

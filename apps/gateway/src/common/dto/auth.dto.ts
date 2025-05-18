@@ -29,3 +29,24 @@ export class LoginResponseDto {
   accessToken: string;
   refreshToken: string;
 }
+
+export class RefreshTokenRequestDto {
+  @IsString()
+  refreshToken: string;
+}
+
+export class RefreshTokenResponseDto {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export class ValidateRequestDto {
+  @IsString()
+  accessToken: string;
+}
+
+export class ValidateResponseDto {
+  userId: string;
+  role: string;
+  valid: boolean;
+}
