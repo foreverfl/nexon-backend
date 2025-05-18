@@ -31,13 +31,9 @@ import { RolesGuard } from "@/common/guard/roles.guard";
     AuthService,
     GrpcAuthService,
     JwtStrategy,
-    JwtAuthGuard, // ✅ 추가 필요
-    RolesGuard, // ✅ 만약 전역에서 쓰려면 이것도 추가
-  ],
-  exports: [
-    PassportModule,
-    JwtAuthGuard, // ✅ main.ts에서 app.get() 하려면 export도 필요
+    JwtAuthGuard,
     RolesGuard,
   ],
+  exports: [PassportModule, JwtAuthGuard, RolesGuard],
 })
 export class AuthModule {}

@@ -1,5 +1,5 @@
 import { GrpcAuthService } from "@/auth/grpc-auth.service";
-import { ValidateRequestDto, ValidateResponseDto } from "@/common/dto/auth.dto";
+import { ValidateResponseDto } from "@/common/dto/auth.dto";
 import { Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
@@ -10,16 +10,18 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: "dummy-secret",
+      secretOrKey: "my-secret",
     });
   }
 
-  async validate(payload: ValidateRequestDto): Promise<ValidateResponseDto> {
-    const user = await this.authService.validateToken(payload);
-    return {
-      userId: user.userId,
-      role: user.role,
-      valid: user.valid,
-    };
+  validate(payload: {
+    userId: string;
+    role: string;
+  }): Promise<ValidateResponseDto> {
+    return Promise.resolve({
+      userId: payload.userId,
+      role: payload.role,
+      valid: true,
+    });
   }
 }
