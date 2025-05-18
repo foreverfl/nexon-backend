@@ -31,6 +31,29 @@ export class AuthService {
     return created;
   }
 
+  async validateUser(
+    email: string,
+    plainPassword: string,
+  ): Promise<UserDocument> {
+    const user = await this.repository.findByEmail(email);
+    if (!user) {
+      throw new RpcException({
+        code: status.NOT_FOUND,
+        message: "User not found",
+      });
+    }
+
+    const isMatch = await bcrypt.compare(plainPassword, user.password);
+    if (!isMatch) {
+      throw new RpcException({
+        code: status.UNAUTHENTICATED,
+        message: "Invalid password",
+      });
+    }
+
+    return user;
+  }
+
   async getRole(userId: string): Promise<{ userId: string; role: string }> {
     const user = await this.repository.findByEmail(userId);
 

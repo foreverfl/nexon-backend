@@ -1,13 +1,25 @@
 import { Injectable } from "@nestjs/common";
-import * as jwt from "jsonwebtoken";
+import { JwtService as NestJwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class JwtService {
-  private readonly secret = "my-secret-key"; // TODO: 환경변수로 분리하기
+  constructor(private readonly jwt: NestJwtService) {}
 
-  sign(payload: any) {
-    const accessToken = jwt.sign(payload, this.secret, { expiresIn: "1h" });
-    const refreshToken = jwt.sign(payload, this.secret, { expiresIn: "7d" });
-    return { accessToken, refreshToken };
+  // jwt 생성
+  sign(payload: object, expiresIn: string = "15m"): string {
+    return this.jwt.sign(payload, { expiresIn });
+  }
+
+  // jwt 검증
+  verify<T extends object = any>(token: string): T {
+    return this.jwt.verify<T>(token);
+  }
+
+  signAccessToken(payload: object): string {
+    return this.jwt.sign(payload, { expiresIn: "15m" });
+  }
+
+  signRefreshToken(payload: object): string {
+    return this.jwt.sign(payload, { expiresIn: "7d" });
   }
 }
