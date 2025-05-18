@@ -16,3 +16,16 @@ export class RegisterResponseDto {
   email: string;
   role: string;
 }
+
+export class LoginRequestDto {
+  @IsEmail()
+  email: string;
+
+  @IsString()
+  password: string;
+}
+
+export class LoginResponseDto {
+  accessToken: string;
+  refreshToken: string;
+}
