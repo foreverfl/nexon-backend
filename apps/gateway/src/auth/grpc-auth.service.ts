@@ -5,8 +5,9 @@ import {
   RefreshTokenResponseDto,
   RegisterRequestDto,
   RegisterResponseDto,
+  ValidateRequestDto,
+  ValidateResponseDto,
 } from "@/common/dto/auth.dto";
-import { ValidateResponseDto } from "@/common/dto/validate-response";
 import { Inject, Injectable, OnModuleInit } from "@nestjs/common";
 import { ClientGrpc } from "@nestjs/microservices";
 import { lastValueFrom, Observable } from "rxjs";
@@ -17,7 +18,7 @@ interface GrpcAuthServiceClient {
   RefreshToken(
     data: RefreshTokenRequestDto,
   ): Observable<RefreshTokenResponseDto>;
-  Validate(data: { accessToken: string }): Observable<ValidateResponseDto>;
+  Validate(data: ValidateRequestDto): Observable<ValidateResponseDto>;
 }
 
 @Injectable()
@@ -45,10 +46,8 @@ export class GrpcAuthService implements OnModuleInit {
     return lastValueFrom(this.grpcAuthService.RefreshToken(data));
   }
 
-  async validateToken(
-    accessToken: string,
-  ): Promise<ValidateResponseDto | null> {
-    if (!accessToken) throw new Error("Access token is required");
-    return lastValueFrom(this.grpcAuthService.Validate({ accessToken }));
+  async validateToken(data: ValidateRequestDto): Promise<ValidateResponseDto> {
+    if (!data) throw new Error("Access token is required");
+    return lastValueFrom(this.grpcAuthService.Validate(data));
   }
 }
