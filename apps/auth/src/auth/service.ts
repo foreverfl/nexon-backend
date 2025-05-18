@@ -4,6 +4,7 @@ import { UserDocument } from "@/common/schema/user.schema";
 import { status } from "@grpc/grpc-js";
 import { Inject, Injectable } from "@nestjs/common";
 import { RpcException } from "@nestjs/microservices";
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class AuthService {
@@ -21,8 +22,12 @@ export class AuthService {
       });
     }
 
-    // TODO: 비밀번호 해싱은 여기에서!
-    const created = await this.repository.save(data);
+    const hashed = await bcrypt.hash(data.password, 10);
+
+    const created = await this.repository.save({
+      ...data,
+      password: hashed,
+    });
     return created;
   }
 }
