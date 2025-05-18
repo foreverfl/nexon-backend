@@ -73,14 +73,4 @@ export class AuthController {
       };
     }
   }
-
-  @GrpcMethod("AuthService", "GetRole")
-  async getRole(data: { userId: string }) {
-    const result = await this.authService.getRole(data.userId);
-
-    return {
-      userId: result.userId.toString(),
-      role: result.role,
-    };
-  }
 }

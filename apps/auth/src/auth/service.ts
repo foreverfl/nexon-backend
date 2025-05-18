@@ -96,20 +96,4 @@ export class AuthService {
       refreshToken: newRefreshToken,
     };
   }
-
-  async getRole(userId: string): Promise<{ userId: string; role: string }> {
-    const user = await this.repository.findByEmail(userId);
-
-    if (!user) {
-      throw new RpcException({
-        code: status.NOT_FOUND,
-        message: "User not found",
-      });
-    }
-
-    return {
-      userId: user._id.toString(),
-      role: user.role,
-    };
-  }
 }
