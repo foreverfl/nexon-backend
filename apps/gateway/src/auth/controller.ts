@@ -1,11 +1,17 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { AuthService } from "@/auth/service";
+import { Public } from "@/common/decorator/public.decorator";
 import { RegisterRequestDto } from "@/common/dto/auth.dto";
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 
 @Controller("auth")
+@Public()
 export class AuthController {
+  constructor(private readonly authService: AuthService) {}
+
   @Post("register")
-  register(@Body() dto: RegisterRequestDto) {
-    return { message: "Stub: register success", data: dto };
+  async register(@Body() dto: RegisterRequestDto) {
+    const result = await this.authService.register(dto);
+    return { message: "Register success", data: result };
   }
 
   @Post("login")
