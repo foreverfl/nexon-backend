@@ -1,8 +1,51 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { LoggingInterceptor } from "@/common/interceptor/logging.interceptor";
+import { ValidationPipe } from "@nestjs/common";
+import { NestFactory } from "@nestjs/core";
+import { MicroserviceOptions, Transport } from "@nestjs/microservices";
+import { resolve } from "path";
+import { AppModule } from "./app.module";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(process.env.PORT ?? 3000);
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
+
+  // 로깅 인터셉터 등록
+  app.useGlobalInterceptors(new LoggingInterceptor());
+
+  // gRPC 서버 연결
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: "events",
+      protoPath: resolve(process.cwd(), "src/events/events.proto"),
+      url: "0.0.0.0:50051",
+    },
+  });
+
+  // Kafka 서버 연결
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        brokers: [process.env.KAFKA_BROKER || "localhost:9092"],
+      },
+      consumer: {
+        groupId: `auth-consumer-server-${Math.floor(Math.random() * 1000)}`,
+      },
+    },
+  });
+
+  // 두 개의 마이크로서비스(gRPC + Kafka)
+  await app.startAllMicroservices();
+  // HTTP 서버
+  await app.listen(3000);
 }
-bootstrap();
+
+void bootstrap();

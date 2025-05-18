@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package events;
+
+service EventService {
+  rpc RegisterEvent (RegisterEventRequest) returns (RegisterEventResponse);
+}
+
+message RegisterEventRequest {
+  string title = 1;
+  string description = 2;
+}
+
+message RegisterEventResponse {
+  string eventId = 1;
+  string title = 2;
+}
