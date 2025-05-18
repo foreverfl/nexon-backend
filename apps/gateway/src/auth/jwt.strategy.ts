@@ -1,4 +1,4 @@
-import { GrpcAuthService } from "@/common/auth/grpc-auth.service";
+import { GrpcAuthService } from "@/auth/grpc-auth.service";
 import { ValidateResponseDto } from "@/common/dto/validate-response";
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";

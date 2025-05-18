@@ -1,24 +1,16 @@
-import { Injectable } from "@nestjs/common";
-import { ClientGrpc } from "@nestjs/microservices";
-import { Inject } from "@nestjs/common";
-import { lastValueFrom } from "rxjs";
+import { GrpcAuthService } from "@/auth/grpc-auth.service";
 import { RegisterRequestDto } from "@/common/dto/auth.dto";
-
-interface AuthGrpcService {
-  register(data: RegisterRequestDto): any;
-}
+import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class AuthService {
-  private authService: AuthGrpcService;
+  constructor(private readonly grpcAuthService: GrpcAuthService) {}
 
-  constructor(@Inject("AUTH_PACKAGE") private readonly client: ClientGrpc) {}
-
-  onModuleInit() {
-    this.authService = this.client.getService<AuthGrpcService>("AuthService");
+  register(data: RegisterRequestDto) {
+    return this.grpcAuthService.register(data);
   }
 
-  async register(data: RegisterRequestDto) {
-    return await lastValueFrom(this.authService.register(data));
+  validateToken(token: string) {
+    return this.grpcAuthService.validateToken(token);
   }
 }
