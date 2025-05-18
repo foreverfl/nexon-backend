@@ -1,8 +1,9 @@
+import { LoggingInterceptor } from "@/common/interceptor/logging.interceptor";
+import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { MicroserviceOptions, Transport } from "@nestjs/microservices";
 import { join } from "path";
 import { AppModule } from "./app.module";
-import { ValidationPipe } from "@nestjs/common";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,6 +15,8 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
+  app.useGlobalInterceptors(new LoggingInterceptor());
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
