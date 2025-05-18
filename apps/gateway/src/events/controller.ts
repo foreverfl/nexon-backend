@@ -3,9 +3,11 @@ import { EventsService } from "@/events/service";
 import { Roles } from "@/common/decorator/roles.decorator";
 import { JwtAuthGuard } from "@/common/guard/jwt-auth.guard";
 import { RolesGuard } from "@/common/guard/roles.guard";
-
-@Controller("events")
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+@ApiTags("events")
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
+@Controller("events")
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
