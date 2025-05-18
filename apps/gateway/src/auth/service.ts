@@ -1,5 +1,10 @@
 import { GrpcAuthService } from "@/auth/grpc-auth.service";
-import { LoginRequestDto, RegisterRequestDto } from "@/common/dto/auth.dto";
+import {
+  LoginRequestDto,
+  RefreshTokenRequestDto,
+  RefreshTokenResponseDto,
+  RegisterRequestDto,
+} from "@/common/dto/auth.dto";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
@@ -12,6 +17,12 @@ export class AuthService {
 
   login(data: LoginRequestDto) {
     return this.grpcAuthService.login(data);
+  }
+
+  refreshTokens(
+    data: RefreshTokenRequestDto,
+  ): Promise<RefreshTokenResponseDto> {
+    return this.grpcAuthService.refreshToken(data);
   }
 
   validateToken(token: string) {
