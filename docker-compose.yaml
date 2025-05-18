@@ -74,7 +74,7 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - "3002:3000"
-      - "30002:50051"
+      - "30002:50052"
     volumes:
       - ./apps/event:/app
       - /app/node_modules
