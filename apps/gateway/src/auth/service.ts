@@ -1,5 +1,5 @@
 import { GrpcAuthService } from "@/auth/grpc-auth.service";
-import { RegisterRequestDto } from "@/common/dto/auth.dto";
+import { LoginRequestDto, RegisterRequestDto } from "@/common/dto/auth.dto";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
@@ -8,6 +8,10 @@ export class AuthService {
 
   register(data: RegisterRequestDto) {
     return this.grpcAuthService.register(data);
+  }
+
+  login(data: LoginRequestDto) {
+    return this.grpcAuthService.login(data);
   }
 
   validateToken(token: string) {

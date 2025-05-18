@@ -1,6 +1,6 @@
 import { AuthService } from "@/auth/service";
 import { Public } from "@/common/decorator/public.decorator";
-import { RegisterRequestDto } from "@/common/dto/auth.dto";
+import { LoginRequestDto, RegisterRequestDto } from "@/common/dto/auth.dto";
 import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 
 @Controller("auth")
@@ -10,16 +10,12 @@ export class AuthController {
 
   @Post("register")
   async register(@Body() dto: RegisterRequestDto) {
-    const result = await this.authService.register(dto);
-    return { message: "Register success", data: result };
+    return this.authService.register(dto);
   }
 
   @Post("login")
-  login() {
-    return {
-      accessToken: "stub-access-token",
-      refreshToken: "stub-refresh-token",
-    };
+  async login(@Body() dto: LoginRequestDto) {
+    return this.authService.login(dto);
   }
 
   @Post("logout")
