@@ -8,6 +8,7 @@ service AuthService {
   rpc Logout (LogoutRequest) returns (LogoutResponse);
   rpc RefreshToken (RefreshTokenRequest) returns (RefreshTokenResponse);
   rpc Validate (ValidateRequest) returns (ValidateResponse);
+  rpc GetRole (GetRoleRequest) returns (GetRoleResponse);
 }
 
 // 회원가입
@@ -62,4 +63,14 @@ message ValidateResponse {
   string userId = 1;
   string role = 2;
   bool valid = 3;
+}
+
+// 역할 조회
+message GetRoleRequest {
+  string userId = 1;
+}
+
+message GetRoleResponse {
+  string userId = 1;
+  string role = 2;
 }
