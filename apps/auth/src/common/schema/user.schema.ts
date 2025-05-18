@@ -3,7 +3,7 @@ import { Document, Types } from "mongoose";
 
 export type UserDocument = User & Document<Types.ObjectId>;
 
-@Schema()
+@Schema({ timestamps: true })
 export class User {
   @Prop({ required: true, unique: true })
   email: string;
