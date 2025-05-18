@@ -5,7 +5,14 @@ import {
   RefreshTokenRequestDto,
   RegisterRequestDto,
 } from "@/common/dto/auth.dto";
-import { Body, Controller, Post } from "@nestjs/common";
+import { ServiceError, status } from "@grpc/grpc-js";
+import {
+  Body,
+  ConflictException,
+  Controller,
+  InternalServerErrorException,
+  Post,
+} from "@nestjs/common";
 
 @Controller("auth")
 @Public()
@@ -14,7 +21,21 @@ export class AuthController {
 
   @Post("register")
   async register(@Body() dto: RegisterRequestDto) {
-    return this.authService.register(dto);
+    try {
+      return await this.authService.register(dto);
+    } catch (err: unknown) {
+      const grpcError = err as ServiceError;
+
+      if (grpcError.code === status.ALREADY_EXISTS) {
+        throw new ConflictException(
+          grpcError.details || "Email already exists",
+        );
+      }
+
+      throw new InternalServerErrorException(
+        "Unexpected error from AuthService",
+      );
+    }
   }
 
   @Post("login")
