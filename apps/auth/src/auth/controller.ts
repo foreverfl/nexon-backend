@@ -1,8 +1,10 @@
-import { Controller } from "@nestjs/common";
+import { Controller, UseInterceptors } from "@nestjs/common";
 import { GrpcMethod } from "@nestjs/microservices";
 import { AuthService } from "@/auth/service";
 import { RegisterRequestDto, RegisterResponseDto } from "@/common/dto/auth.dto";
+import { LoggingInterceptor } from "@/common/interceptor/logging.interceptor";
 
+@UseInterceptors(LoggingInterceptor)
 @Controller()
 export class AuthController {
   constructor(private readonly appService: AuthService) {}
