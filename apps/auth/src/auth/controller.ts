@@ -51,4 +51,14 @@ export class AuthController {
       valid: true,
     };
   }
+
+  @GrpcMethod("AuthService", "GetRole")
+  async getRole(data: { userId: string }) {
+    const result = await this.appService.getRole(data.userId);
+
+    return {
+      userId: result.userId.toString(),
+      role: result.role,
+    };
+  }
 }
