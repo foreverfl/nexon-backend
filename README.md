@@ -79,7 +79,7 @@ graph TD
   AUTH -->|Kafka Publish| KAFKA
   KAFKA -->|Consume| EVENT
   EVENT --> MONGO
-  EVENT --> REDIS
+  EVENT --> REDISr
 ```
 
 ---

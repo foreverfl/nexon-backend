@@ -2,6 +2,7 @@ import { AuthController } from "@/auth/controller";
 import { AuthRepository } from "@/auth/repository";
 import { AuthService } from "@/auth/service";
 import { JwtService } from "@/common/auth/jwt.service";
+import { CustomRedisModule } from "@/common/redis/redis.module";
 import { User, UserSchema } from "@/common/schema/user.schema";
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
@@ -14,6 +15,7 @@ import { MongooseModule } from "@nestjs/mongoose";
       secret: process.env.JWT_SECRET || "my-secret",
       signOptions: { expiresIn: "15m" },
     }),
+    CustomRedisModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, AuthRepository, JwtService],

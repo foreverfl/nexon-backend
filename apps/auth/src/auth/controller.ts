@@ -35,9 +35,12 @@ export class AuthController {
       userId: user._id.toString(),
     });
 
+    await this.authService.saveRefreshToken(user._id.toString(), refreshToken);
+
     return { accessToken, refreshToken };
   }
 
+  // TODO: 블랙리스트에 추가하는 로직 필요
   @GrpcMethod("AuthService", "Logout")
   logout(data: { accessToken: string }) {
     console.log("🚪 Logout called:", data);
@@ -47,11 +50,8 @@ export class AuthController {
   }
 
   @GrpcMethod("AuthService", "RefreshToken")
-  refreshToken(data: { refreshToken: string }) {
-    console.log("♻️ RefreshToken called:", data);
-    return {
-      refreshToken: "new-refresh-token",
-    };
+  async refreshToken(data: { refreshToken: string }) {
+    return this.authService.refreshTokens(data.refreshToken);
   }
 
   @GrpcMethod("AuthService", "Validate")
