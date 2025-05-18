@@ -19,8 +19,10 @@ async function bootstrap() {
     }),
   );
 
+  // 로깅 인터셉터 등록
   app.useGlobalInterceptors(new LoggingInterceptor());
 
+  // gRPC 서버 연결
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
@@ -30,8 +32,23 @@ async function bootstrap() {
     },
   });
 
-  await app.startAllMicroservices(); // gRPC 서버
-  await app.listen(3000); // HTTP 서버
+  // Kafka 서버 연결
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        brokers: [process.env.KAFKA_BROKER || "localhost:9092"],
+      },
+      consumer: {
+        groupId: "auth-consumer",
+      },
+    },
+  });
+
+  // 두 개의 마이크로서비스(gRPC + Kafka)
+  await app.startAllMicroservices();
+  // HTTP 서버
+  await app.listen(3000);
 }
 
 void bootstrap();
