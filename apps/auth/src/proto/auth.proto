@@ -50,9 +50,9 @@ message RefreshTokenRequest {
 }
 
 message RefreshTokenResponse {
-  string refreshToken = 1;
+  string accessToken = 1;
+  string refreshToken = 2;
 }
-
 
 // 토큰 검증
 message ValidateRequest {

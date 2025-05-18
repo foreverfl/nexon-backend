@@ -40,7 +40,7 @@ async function bootstrap() {
         brokers: [process.env.KAFKA_BROKER || "localhost:9092"],
       },
       consumer: {
-        groupId: "auth-consumer",
+        groupId: `auth-consumer-server-${Math.floor(Math.random() * 1000)}`,
       },
     },
   });
