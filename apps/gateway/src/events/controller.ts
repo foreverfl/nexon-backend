@@ -1,12 +1,17 @@
-import { Controller, Get, Param, Post } from "@nestjs/common";
+import { Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { EventsService } from "@/events/service";
+import { Roles } from "@/common/decorator/roles.decorator";
+import { JwtAuthGuard } from "@/common/guard/jwt-auth.guard";
+import { RolesGuard } from "@/common/guard/roles.guard";
 
 @Controller("events")
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   // 📌 USER (유저)
   @Get("public")
+  @Roles("USER")
   getActiveEvents() {
     return { message: "활성 이벤트 목록 조회 (stub)" };
   }
@@ -26,13 +31,15 @@ export class EventsController {
     return { message: `유저 보상 요청 (stub) for Event ID: ${eventId}` };
   }
 
-  // 📌 OPERATOR (운영자)
+  // 이벤트 등록 및 조회 (운영자)
   @Post()
+  @Roles("OPERATOR")
   createEvent() {
     return { message: "이벤트 생성 (stub)" };
   }
 
   @Get()
+  @Roles("OPERATOR")
   getAllEventsAdmin() {
     return { message: "운영자용 전체 이벤트 목록 조회 (stub)" };
   }
