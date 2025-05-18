@@ -1,6 +1,6 @@
 import { GrpcAuthService } from "@/auth/grpc-auth.service";
-import { ValidateResponseDto } from "@/common/dto/validate-response";
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { ValidateRequestDto, ValidateResponseDto } from "@/common/dto/auth.dto";
+import { Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 
@@ -14,11 +14,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: any): Promise<ValidateResponseDto> {
-    const user = await this.authService.validateToken(payload); // gRPC 호출
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-    return user; // req.user 에 바인딩됨
+  async validate(payload: ValidateRequestDto): Promise<ValidateResponseDto> {
+    const user = await this.authService.validateToken(payload);
+    return {
+      userId: user.userId,
+      role: user.role,
+      valid: user.valid,
+    };
   }
 }
