@@ -3,11 +3,6 @@ import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 
 @Module({
-  imports: [
-    MongooseModule.forRoot(
-      "mongodb://root:1234@mongodb:27017/auth?authSource=admin",
-    ),
-    AuthModule,
-  ],
+  imports: [MongooseModule.forRoot(process.env.MONGO_URI || ""), AuthModule],
 })
 export class AppModule {}

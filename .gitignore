@@ -13,10 +13,10 @@ coverage/
 npm-debug.log*
 pnpm-debug.log*
 
-# 💼 환경변수
-.env
-.env.local
-.env.*.local
+# 💼 환경변수 (과제이기 떄문에 포함)
+# .env
+# .env.local
+# .env.*.local
 
 # 🐳 Docker 관련
 *.local
