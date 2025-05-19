@@ -6,7 +6,7 @@ import {
   RegisterRequestDto,
   ValidateRequestDto,
   ValidateResponseDto,
-} from "@/common/dto/auth.dto";
+} from "@/auth/auth.dto";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
