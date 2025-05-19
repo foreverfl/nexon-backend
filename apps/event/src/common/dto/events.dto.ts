@@ -1,8 +1,9 @@
 // events.dto.ts
-import { Type } from "class-transformer";
+import { Expose, Type } from "class-transformer";
 import {
   IsArray,
   IsBoolean,
+  IsDate,
   IsInt,
   IsOptional,
   IsString,
@@ -76,31 +77,46 @@ export class EventDslDto {
 // ===== 공통 Event DTO =====
 
 export class EventDto {
+  constructor(partial: Partial<EventDto>) {
+    Object.assign(this, partial);
+  }
+
+  @Expose()
   @IsString()
   id: string;
 
+  @Expose()
   @IsString()
   title: string;
 
+  @Expose()
   @IsString()
   description: string;
 
-  @IsString()
-  startDate: string;
+  @Expose()
+  @IsDate()
+  @Type(() => Date)
+  startDate: Date;
 
-  @IsString()
-  endDate: string;
+  @Expose()
+  @IsDate()
+  @Type(() => Date)
+  endDate: Date;
 
+  @Expose()
   @IsBoolean()
   isActive: boolean;
 
+  @Expose()
   @IsArray()
   @IsString({ each: true })
   tags: string[];
 
+  @Expose()
   @IsString()
   createdBy: string;
 
+  @Expose()
   @ValidateNested()
   @Type(() => EventDslDto)
   dsl: EventDslDto;
