@@ -25,7 +25,7 @@ async function bootstrap() {
     options: {
       package: "events",
       protoPath: resolve(process.cwd(), "src/events/events.proto"),
-      url: "0.0.0.0:50051",
+      url: "0.0.0.0:50052",
     },
   });
 

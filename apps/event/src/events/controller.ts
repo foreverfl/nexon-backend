@@ -1,6 +1,6 @@
 import {
-  RegisterEventRequestDto,
-  RegisterEventResponseDto,
+  CreateEventRequestDto,
+  CreateEventResponseDto,
 } from "@/common/dto/events.dto";
 import { LoggingInterceptor } from "@/common/interceptor/logging.interceptor";
 import { EventsService } from "@/events/service";
@@ -12,10 +12,10 @@ import { GrpcMethod } from "@nestjs/microservices";
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
-  @GrpcMethod("EventService", "RegisterEvent")
-  async registerEvent(
-    data: RegisterEventRequestDto,
-  ): Promise<RegisterEventResponseDto> {
-    return this.eventsService.registerEvent(data);
+  @GrpcMethod("EventService", "CreateEvent")
+  async createEvent(
+    data: CreateEventRequestDto,
+  ): Promise<CreateEventResponseDto> {
+    return this.eventsService.createEvent(data);
   }
 }

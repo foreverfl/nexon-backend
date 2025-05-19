@@ -1,6 +1,6 @@
 import {
-  RegisterEventRequestDto,
-  RegisterEventResponseDto,
+  CreateEventRequestDto,
+  CreateEventResponseDto,
 } from "@/common/dto/events.dto";
 import { EventsRepository } from "@/events/repository";
 import { Injectable } from "@nestjs/common";
@@ -9,13 +9,14 @@ import { Injectable } from "@nestjs/common";
 export class EventsService {
   constructor(private readonly eventRepository: EventsRepository) {}
 
-  async registerEvent(
-    data: RegisterEventRequestDto,
-  ): Promise<RegisterEventResponseDto> {
-    const event = await this.eventRepository.create(data);
+  async createEvent(
+    dto: CreateEventRequestDto,
+  ): Promise<CreateEventResponseDto> {
+    console.log("📦 EventsService.createEvent 진입");
+    const created = await this.eventRepository.create(dto);
+    console.log("✅ 저장 완료:", created);
     return {
-      eventId: event._id.toString(),
-      title: event.title,
+      id: created._id.toString(),
     };
   }
 }
