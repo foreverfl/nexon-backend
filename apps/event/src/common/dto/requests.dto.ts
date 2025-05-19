@@ -114,13 +114,3 @@ export class GetRewardRequestByIdResponseDto {
   @Type(() => RewardRequestDto)
   request: RewardRequestDto;
 }
-
-// 감사 로그 조회 (감사자)
-export class GetRewardAuditLogRequestDto {}
-
-export class GetRewardAuditLogResponseDto {
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => RewardRequestDto)
-  logs: RewardRequestDto[];
-}

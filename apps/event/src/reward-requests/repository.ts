@@ -8,7 +8,7 @@ import {
 } from "@/common/schema/reward-requests.schema";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model, Types } from "mongoose";
+import { Model } from "mongoose";
 
 @Injectable()
 export class RewardRequestsRepository {
@@ -23,17 +23,13 @@ export class RewardRequestsRepository {
 
   async findByUserId(userId: string) {
     return this.model
-      .find({ userId: new Types.ObjectId(userId), del_yn: false })
+      .find({ userId, del_yn: false })
       .sort({ createdAt: -1 })
       .lean();
   }
 
   async findById(id: string) {
     return this.model.findById(id).orFail().lean();
-  }
-
-  async findAll() {
-    return this.model.find({ del_yn: false }).lean();
   }
 
   async findAllPaginated(dto: GetAllRewardRequestsRequestDto) {

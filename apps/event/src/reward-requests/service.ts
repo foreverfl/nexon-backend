@@ -1,14 +1,12 @@
 import {
-  RequestRewardRequestDto,
-  RequestRewardResponseDto,
-  GetMyRewardRequestsRequestDto,
-  GetMyRewardRequestsResponseDto,
   GetAllRewardRequestsRequestDto,
   GetAllRewardRequestsResponseDto,
+  GetMyRewardRequestsRequestDto,
+  GetMyRewardRequestsResponseDto,
   GetRewardRequestByIdRequestDto,
   GetRewardRequestByIdResponseDto,
-  GetRewardAuditLogRequestDto,
-  GetRewardAuditLogResponseDto,
+  RequestRewardRequestDto,
+  RequestRewardResponseDto,
   RewardRequestDto,
 } from "@/common/dto/requests.dto";
 import { Injectable } from "@nestjs/common";
@@ -23,6 +21,9 @@ export class RewardRequestsService {
   async requestReward(
     dto: RequestRewardRequestDto,
   ): Promise<RequestRewardResponseDto> {
+    // TODO: 유효성 검증 로직 구현
+
+    // 보상 요청
     const request = await this.rewardRequestsRepository.create(dto);
     return { id: request._id.toString() };
   }
@@ -39,8 +40,11 @@ export class RewardRequestsService {
           new RewardRequestDto({
             id: r._id.toString(),
             userId: r.userId.toString(),
+            eventId: r.eventId.toString(),
             rewardId: r.rewardId.toString(),
-            fulfilledAt: r.fulfilledAt?.toISOString(),
+            status: r.status,
+            fulfilledAt: r.fulfilledAt?.toISOString() ?? "",
+            comment: r.comment ?? "",
           }),
       ),
     };
@@ -75,27 +79,12 @@ export class RewardRequestsService {
       request: new RewardRequestDto({
         id: request._id.toString(),
         userId: request.userId.toString(),
+        eventId: request.eventId.toString(),
         rewardId: request.rewardId.toString(),
-        fulfilledAt: request.fulfilledAt?.toISOString(),
+        status: request.status,
+        fulfilledAt: request.fulfilledAt?.toISOString() ?? "",
+        comment: request.comment ?? "",
       }),
-    };
-  }
-
-  async getRewardAuditLog(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _dto: GetRewardAuditLogRequestDto,
-  ): Promise<GetRewardAuditLogResponseDto> {
-    const logs = await this.rewardRequestsRepository.findAll(); // or findAuditLogs()
-    return {
-      logs: logs.map(
-        (r) =>
-          new RewardRequestDto({
-            id: r._id.toString(),
-            userId: r.userId.toString(),
-            rewardId: r.rewardId.toString(),
-            fulfilledAt: r.fulfilledAt?.toISOString(),
-          }),
-      ),
     };
   }
 }
