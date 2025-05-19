@@ -11,7 +11,6 @@ service EventsService {
 }
 
 // 공통 모델
-// Event
 message Event {
   string id = 1;
   string title = 2;
@@ -19,29 +18,14 @@ message Event {
   string startDate = 4;
   string endDate = 5;
   bool isActive = 6;
-  repeated string tags = 7;
-  string createdBy = 8;
-  EventDsl dsl = 9;
-}
-
-// DSL 구조
-message EventDsl {
-  repeated DslRule rules = 1;
-  repeated DslReward rewards = 2;
-  DslCondition conditions = 3;
-}
-
-message DslRule {
-  string type = 1;
-  int32 count = 2;
-  string targetId = 3;
-  repeated string daysOfWeek = 4;
-}
-
-message DslReward {
-  string type = 1;
-  int32 value = 2;
-  string code = 3;
+  bool isDeleted = 7;
+  int32 minLevel = 8;
+  repeated string region = 9;
+  string worldType = 10;
+  string platform = 11;
+  repeated string tags = 12;
+  string createdBy = 13;
+  repeated string rewardIds = 14;
 }
 
 message DslCondition {
@@ -60,7 +44,11 @@ message CreateEventRequest {
   bool isActive = 5;
   repeated string tags = 6;
   string createdBy = 7;
-  EventDsl dsl = 8;
+  int32 minLevel = 8;
+  repeated string region = 9;
+  string worldType = 10;
+  string platform = 11;
+  repeated string rewardIds = 12;
 }
 
 message CreateEventResponse {
@@ -75,7 +63,7 @@ message GetAllEventsRequest {
 
 message GetAllEventsResponse {
   repeated Event events = 1;
-  int32 total = 2; 
+  int32 total = 2;
   int32 page = 3;
   int32 limit = 4;
 }
@@ -99,7 +87,11 @@ message UpdateEventRequest {
   bool isActive = 6;
   repeated string tags = 7;
   string createdBy = 8;
-  EventDsl dsl = 9;
+  int32 minLevel = 9;
+  repeated string region = 10;
+  string worldType = 11;
+  string platform = 12;
+  repeated string rewardIds = 13;
 }
 
 message UpdateEventResponse {
