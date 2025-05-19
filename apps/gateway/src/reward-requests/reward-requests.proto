@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package rewardrequests;
+
+service RewardRequestsService {
+  rpc RequestReward (RequestRewardRequest) returns (RequestRewardResponse);
+  rpc GetMyRewardRequests (GetMyRewardRequestsRequest) returns (GetMyRewardRequestsResponse);
+  rpc GetAllRewardRequests (GetAllRewardRequestsRequest) returns (GetAllRewardRequestsResponse);
+  rpc GetRewardRequestById (GetRewardRequestByIdRequest) returns (GetRewardRequestByIdResponse);
+  rpc GetRewardAuditLog (GetRewardAuditLogRequest) returns (GetRewardAuditLogResponse);
+}
+
+// 모델
+message RewardRequest {
+  string id = 1;
+  string userId = 2;
+  string eventId = 3;
+  string rewardId = 4;
+  string status = 5; // PENDING | APPROVED | REJECTED
+  string fulfilledAt = 6;
+  string comment = 7;
+}
+
+// 보상 요청 (유저)
+message RequestRewardRequest {
+  string userId = 1;
+  string eventId = 2;
+  string rewardId = 3;
+}
+
+message RequestRewardResponse {
+  string id = 1;
+}
+
+// 내 보상 요청 조회 (유저)
+message GetMyRewardRequestsRequest {
+  string userId = 1;
+}
+
+message GetMyRewardRequestsResponse {
+  repeated RewardRequest requests = 1;
+}
+
+// 전체 요청 조회 (운영자)
+message GetAllRewardRequestsRequest {
+  int32 page = 1;
+  int32 limit = 2;
+}
+
+message GetAllRewardRequestsResponse {
+  repeated RewardRequest requests = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 limit = 4;
+}
+
+// 단건 요청 조회 (운영자)
+message GetRewardRequestByIdRequest {
+  string id = 1;
+}
+
+message GetRewardRequestByIdResponse {
+  RewardRequest request = 1;
+}

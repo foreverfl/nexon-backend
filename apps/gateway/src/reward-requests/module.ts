@@ -1,5 +1,5 @@
-import { RewardsRequestsController } from "@/rewards-requests/controller";
-import { RewardsRequestsService } from "@/rewards-requests/service";
+import { RewardsRequestsController } from "@/reward-requests/controller";
+import { RewardsRequestsService } from "@/reward-requests/service";
 import { Module } from "@nestjs/common";
 
 @Module({
