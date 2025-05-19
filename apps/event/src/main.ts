@@ -4,6 +4,7 @@ import { NestFactory } from "@nestjs/core";
 import { MicroserviceOptions, Transport } from "@nestjs/microservices";
 import { resolve } from "path";
 import { AppModule } from "./app.module";
+import mongoose from "mongoose";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -48,4 +49,5 @@ async function bootstrap() {
   await app.listen(3000);
 }
 
+mongoose.set("debug", true);
 void bootstrap();
