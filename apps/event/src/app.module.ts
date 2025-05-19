@@ -9,7 +9,7 @@ import { MongooseModule } from "@nestjs/mongoose";
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, // 어디서든 ConfigService 주입 없이 사용 가능
+      isGlobal: true,
     }),
     MongooseModule.forRoot(process.env.MONGO_URI || ""),
     RedisModule.forRoot({

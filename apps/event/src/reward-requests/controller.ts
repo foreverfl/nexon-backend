@@ -7,8 +7,6 @@ import {
   GetAllRewardRequestsResponseDto,
   GetRewardRequestByIdRequestDto,
   GetRewardRequestByIdResponseDto,
-  GetRewardAuditLogRequestDto,
-  GetRewardAuditLogResponseDto,
 } from "@/common/dto/requests.dto";
 import { Controller, OnModuleInit } from "@nestjs/common";
 import { GrpcMethod } from "@nestjs/microservices";
@@ -48,12 +46,5 @@ export class RewardRequestsController implements OnModuleInit {
     data: GetRewardRequestByIdRequestDto,
   ): Promise<GetRewardRequestByIdResponseDto> {
     return this.rewardRequestsService.getRewardRequestById(data);
-  }
-
-  @GrpcMethod("RewardRequestsService", "GetRewardAuditLog")
-  getRewardAuditLog(
-    data: GetRewardAuditLogRequestDto,
-  ): Promise<GetRewardAuditLogResponseDto> {
-    return this.rewardRequestsService.getRewardAuditLog(data);
   }
 }

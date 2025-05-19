@@ -62,10 +62,3 @@ message GetRewardRequestByIdRequest {
 message GetRewardRequestByIdResponse {
   RewardRequest request = 1;
 }
-
-// 감사 로그 조회 (감사자)
-message GetRewardAuditLogRequest {}
-
-message GetRewardAuditLogResponse {
-  repeated RewardRequest logs = 1;
-}
