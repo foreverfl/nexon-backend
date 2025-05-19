@@ -1,8 +1,9 @@
+import { EventsModule } from "@/events/module";
+import { RewardsModule } from "@/rewards/module";
 import { RedisModule } from "@nestjs-modules/ioredis";
 import { Module } from "@nestjs/common";
-import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule } from "@nestjs/config";
-import { EventsModule } from "./events/module";
+import { MongooseModule } from "@nestjs/mongoose";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { EventsModule } from "./events/module";
       },
     }),
     EventsModule,
+    RewardsModule,
   ],
 })
 export class AppModule {}
