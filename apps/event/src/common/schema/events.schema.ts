@@ -1,3 +1,4 @@
+import { EventDsl } from "@/common/schema/event-dsl.schema";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { HydratedDocument } from "mongoose";
 
@@ -20,8 +21,8 @@ export class Event {
   @Prop({ required: true, default: false })
   isActive: boolean;
 
-  @Prop({ type: Object })
-  dsl: any; // DSL 구조 (운영자 정의)
+  @Prop({ type: EventDsl, required: true })
+  dsl: EventDsl;
 
   @Prop({ type: [String], default: [] })
   tags: string[]; // 예: ['출석', '포인트', '이벤트']
