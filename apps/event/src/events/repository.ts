@@ -14,4 +14,25 @@ export class EventsRepository {
     const created = new this.eventModel(dto);
     return created.save();
   }
+
+  async findAll(
+    page: number,
+    limit: number,
+  ): Promise<[EventDocument[], number]> {
+    const skip = (page - 1) * limit;
+    const [events, total] = await Promise.all([
+      this.eventModel
+        .find()
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
+        .lean(),
+      this.eventModel.countDocuments(),
+    ]);
+    return [events, total];
+  }
+
+  async findById(id: string): Promise<EventDocument> {
+    return this.eventModel.findById(id).orFail().lean();
+  }
 }
