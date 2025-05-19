@@ -47,7 +47,12 @@ export class EventsService {
     dto: GetEventByIdRequestDto,
   ): Promise<GetEventByIdResponseDto> {
     const event = await this.eventsRepository.findById(dto.id);
-    return { event: new EventDto(event) };
+    return {
+      event: new EventDto({
+        ...event,
+        rewardIds: event.rewardIds.map((id) => id.toString()),
+      }),
+    };
   }
 
   async updateEvent(
