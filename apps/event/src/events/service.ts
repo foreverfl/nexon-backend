@@ -1,11 +1,15 @@
 import {
   CreateEventRequestDto,
   CreateEventResponseDto,
+  DeleteEventRequestDto,
+  DeleteEventResponseDto,
   EventDto,
   GetAllEventsRequestDto,
   GetAllEventsResponseDto,
   GetEventByIdRequestDto,
   GetEventByIdResponseDto,
+  UpdateEventRequestDto,
+  UpdateEventResponseDto,
 } from "@/common/dto/events.dto";
 import { EventsRepository } from "@/events/repository";
 import { Injectable } from "@nestjs/common";
@@ -44,5 +48,21 @@ export class EventsService {
   ): Promise<GetEventByIdResponseDto> {
     const event = await this.eventsRepository.findById(dto.id);
     return { event: new EventDto(event) };
+  }
+
+  async updateEvent(
+    dto: UpdateEventRequestDto,
+  ): Promise<UpdateEventResponseDto> {
+    const updated = await this.eventsRepository.update(dto.id, dto);
+    return {
+      event: plainToInstance(EventDto, updated),
+    };
+  }
+
+  async deleteEvent(
+    dto: DeleteEventRequestDto,
+  ): Promise<DeleteEventResponseDto> {
+    const success = await this.eventsRepository.softDelete(dto.id);
+    return { success };
   }
 }

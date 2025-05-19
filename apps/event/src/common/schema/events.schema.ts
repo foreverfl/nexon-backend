@@ -21,6 +21,9 @@ export class Event {
   @Prop({ required: true, default: false })
   isActive: boolean;
 
+  @Prop({ default: false })
+  del_yn: boolean;
+
   @Prop({ type: EventDsl, required: true })
   dsl: EventDsl;
 
