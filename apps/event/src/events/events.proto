@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package events;
 
-service EventService {
+service EventsService {
   rpc CreateEvent (CreateEventRequest) returns (CreateEventResponse);
   rpc GetAllEvents (GetAllEventsRequest) returns (GetAllEventsResponse);
   rpc GetEventById (GetEventByIdRequest) returns (GetEventByIdResponse);

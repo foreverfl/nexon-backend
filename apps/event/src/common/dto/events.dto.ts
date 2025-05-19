@@ -108,6 +108,10 @@ export class EventDto {
   isActive: boolean;
 
   @Expose()
+  @IsBoolean()
+  del_yn: boolean;
+
+  @Expose()
   @IsArray()
   @IsString({ each: true })
   tags: string[];
