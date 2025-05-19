@@ -2,6 +2,7 @@ import { RedisModule } from "@nestjs-modules/ioredis";
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
 import { ConfigModule } from "@nestjs/config";
+import { EventsModule } from "./events/module";
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { ConfigModule } from "@nestjs/config";
         port: parseInt(process.env.REDIS_PORT || "6379"),
       },
     }),
+    EventsModule,
   ],
 })
 export class AppModule {}

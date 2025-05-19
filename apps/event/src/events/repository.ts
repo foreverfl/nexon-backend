@@ -1,3 +1,4 @@
+import { CreateEventRequestDto } from "@/common/dto/events.dto";
 import { Event, EventDocument } from "@/common/schema/events.schema";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
@@ -9,7 +10,8 @@ export class EventsRepository {
     @InjectModel(Event.name) private readonly eventModel: Model<EventDocument>,
   ) {}
 
-  async create(data: { title: string; description?: string }) {
-    return this.eventModel.create(data);
+  async create(dto: CreateEventRequestDto): Promise<EventDocument> {
+    const created = new this.eventModel(dto);
+    return created.save();
   }
 }
