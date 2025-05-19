@@ -10,70 +10,6 @@ import {
   ValidateNested,
 } from "class-validator";
 
-// 공통 DSL DTO
-export class DslRuleDto {
-  @IsString()
-  type: string;
-
-  @IsOptional()
-  @IsInt()
-  count?: number;
-
-  @IsOptional()
-  @IsString()
-  targetId?: string;
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  daysOfWeek?: string[];
-}
-
-export class DslRewardDto {
-  @IsString()
-  type: string;
-
-  @IsOptional()
-  @IsInt()
-  value?: number;
-
-  @IsOptional()
-  @IsString()
-  code?: string;
-}
-
-export class DslConditionDto {
-  @IsOptional()
-  @IsInt()
-  minLevel?: number;
-
-  @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
-  region?: string[];
-
-  @IsOptional()
-  @IsString()
-  userType?: string;
-}
-
-export class EventDslDto {
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => DslRuleDto)
-  rules: DslRuleDto[];
-
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => DslRewardDto)
-  rewards: DslRewardDto[];
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => DslConditionDto)
-  conditions?: DslConditionDto;
-}
-
 // ===== 공통 Event DTO =====
 
 export class EventDto {
@@ -109,7 +45,28 @@ export class EventDto {
 
   @Expose()
   @IsBoolean()
-  del_yn: boolean;
+  isDeleted: boolean;
+
+  @Expose()
+  @IsOptional()
+  @IsInt()
+  minLevel?: number;
+
+  @Expose()
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  region?: string[];
+
+  @Expose()
+  @IsOptional()
+  @IsString()
+  worldType?: string;
+
+  @Expose()
+  @IsOptional()
+  @IsString()
+  platform?: string;
 
   @Expose()
   @IsArray()
@@ -121,9 +78,9 @@ export class EventDto {
   createdBy: string;
 
   @Expose()
-  @ValidateNested()
-  @Type(() => EventDslDto)
-  dsl: EventDslDto;
+  @IsArray()
+  @IsString({ each: true })
+  rewardIds: string[];
 }
 
 // 이벤트 등록 (운영자)
@@ -150,9 +107,26 @@ export class CreateEventRequestDto {
   @IsString()
   createdBy: string;
 
-  @ValidateNested()
-  @Type(() => EventDslDto)
-  dsl: EventDslDto;
+  @IsOptional()
+  @IsInt()
+  minLevel?: number;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  region?: string[];
+
+  @IsOptional()
+  @IsString()
+  worldType?: string;
+
+  @IsOptional()
+  @IsString()
+  platform?: string;
+
+  @IsArray()
+  @IsString({ each: true })
+  rewardIds: string[];
 }
 
 export class CreateEventResponseDto {
@@ -226,19 +200,34 @@ export class UpdateEventRequestDto {
   @IsString()
   createdBy: string;
 
-  @ValidateNested()
-  @Type(() => EventDslDto)
-  dsl: EventDslDto;
-}
+  @IsOptional()
+  @IsInt()
+  minLevel?: number;
 
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  region?: string[];
+
+  @IsOptional()
+  @IsString()
+  worldType?: string;
+
+  @IsOptional()
+  @IsString()
+  platform?: string;
+
+  @IsArray()
+  @IsString({ each: true })
+  rewardIds: string[];
+}
 export class UpdateEventResponseDto {
   @ValidateNested()
   @Type(() => EventDto)
   event: EventDto;
 }
 
-// ===== Delete =====
-
+// 이벤트 삭제제
 export class DeleteEventRequestDto {
   @IsString()
   id: string;

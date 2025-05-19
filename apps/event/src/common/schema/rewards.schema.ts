@@ -1,33 +1,27 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { HydratedDocument } from "mongoose";
+import { Document } from "mongoose";
 
-export type RewardDocument = HydratedDocument<Reward>;
+export type RewardDocument = Reward & Document;
 
 @Schema({ timestamps: true })
 export class Reward {
   @Prop({ required: true })
-  type: "point" | "coupon" | "item" | "badge";
-
-  @Prop({ required: true })
-  name: string;
+  type: string; // 예: "ITEM", "POINT", "MESO", "TITLE", "EXP"
 
   @Prop()
-  description?: string;
+  itemId?: number; // 아이템 ID
 
   @Prop()
-  value?: number; // 포인트 수치 등
+  value?: number; // 수치 보상 (메소/포인트/EXP 등)
 
   @Prop()
-  code?: string; // 쿠폰 코드 등
+  duration?: number; // 기간제 보상일 경우 (단위: 일)
 
   @Prop()
-  imageUrl?: string; // 보상 아이콘 이미지
+  description?: string; // 관리자 설명용
 
-  @Prop({ type: [String], default: [] })
-  tags: string[];
-
-  @Prop()
-  createdBy: string; // 운영자 ID or 이름
+  @Prop({ default: false })
+  del_yn: boolean;
 }
 
 export const RewardSchema = SchemaFactory.createForClass(Reward);
