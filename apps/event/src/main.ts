@@ -24,10 +24,11 @@ async function bootstrap() {
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
     options: {
-      package: ["events", "rewards"],
+      package: ["events", "rewards", "rewardrequests"],
       protoPath: [
         resolve(process.cwd(), "src/events/events.proto"),
         resolve(process.cwd(), "src/rewards/rewards.proto"),
+        resolve(process.cwd(), "src/reward-requests/reward-requests.proto"),
       ],
       url: "0.0.0.0:50052",
     },

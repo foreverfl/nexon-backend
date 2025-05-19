@@ -1,4 +1,5 @@
 import { EventsModule } from "@/events/module";
+import { RewardRequestsModule } from "@/reward-requests/module";
 import { RewardsModule } from "@/rewards/module";
 import { RedisModule } from "@nestjs-modules/ioredis";
 import { Module } from "@nestjs/common";
@@ -20,6 +21,7 @@ import { MongooseModule } from "@nestjs/mongoose";
     }),
     EventsModule,
     RewardsModule,
+    RewardRequestsModule,
   ],
 })
 export class AppModule {}
