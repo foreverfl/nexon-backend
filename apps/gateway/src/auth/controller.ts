@@ -4,7 +4,7 @@ import {
   LoginRequestDto,
   RefreshTokenRequestDto,
   RegisterRequestDto,
-} from "@/common/dto/auth.dto";
+} from "@/auth/auth.dto";
 import { ServiceError, status } from "@grpc/grpc-js";
 import {
   Body,
