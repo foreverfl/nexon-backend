@@ -23,6 +23,8 @@ export class RewardRequestsService {
   ): Promise<RequestRewardResponseDto> {
     // TODO: 유효성 검증 로직 구현
 
+    // TODO: 보상 요청 중복 체크 로직 구현 (redis)
+
     // 보상 요청
     const request = await this.rewardRequestsRepository.create(dto);
     return { id: request._id.toString() };
