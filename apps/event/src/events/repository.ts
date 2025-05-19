@@ -5,7 +5,7 @@ import {
 import { Event, EventDocument } from "@/common/schema/events.schema";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 
 @Injectable()
 export class EventsRepository {
@@ -32,13 +32,20 @@ export class EventsRepository {
         .skip(skip)
         .limit(limit)
         .lean(),
-      this.eventModel.countDocuments(),
+      this.eventModel.countDocuments(filter),
     ]);
     return [events, total];
   }
 
-  async findById(id: string): Promise<EventDocument> {
-    return this.eventModel.findById(id).orFail().lean();
+  async findById(id: string): Promise<any> {
+    const event = await this.eventModel.findById(id).orFail().lean();
+
+    return {
+      ...event,
+      rewardIds: (event.rewardIds ?? []).map((id) =>
+        id instanceof Types.ObjectId ? id.toString() : id,
+      ),
+    };
   }
 
   async update(
