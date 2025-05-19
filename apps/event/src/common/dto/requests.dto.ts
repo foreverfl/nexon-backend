@@ -1,15 +1,17 @@
 import { Expose, Type } from "class-transformer";
 import {
-  IsBoolean,
+  IsArray,
+  IsDateString,
+  IsEnum,
   IsInt,
   IsOptional,
   IsString,
   ValidateNested,
-  IsArray,
 } from "class-validator";
 
-export class RewardDto {
-  constructor(partial: Partial<RewardDto>) {
+// 모델
+export class RewardRequestDto {
+  constructor(partial: Partial<RewardRequestDto>) {
     Object.assign(this, partial);
   }
 
@@ -19,62 +21,63 @@ export class RewardDto {
 
   @Expose()
   @IsString()
-  type: string; // "ITEM", "POINT", "MESO", "TITLE", "EXP"
+  userId: string;
+
+  @Expose()
+  @IsString()
+  eventId: string;
+
+  @Expose()
+  @IsString()
+  rewardId: string;
+
+  @Expose()
+  @IsEnum(["PENDING", "APPROVED", "REJECTED"])
+  status: "PENDING" | "APPROVED" | "REJECTED";
 
   @Expose()
   @IsOptional()
-  @IsInt()
-  itemId?: number;
-
-  @Expose()
-  @IsOptional()
-  @IsInt()
-  value?: number;
-
-  @Expose()
-  @IsOptional()
-  @IsInt()
-  duration?: number;
+  @IsDateString()
+  fulfilledAt?: string;
 
   @Expose()
   @IsOptional()
   @IsString()
-  description?: string;
-
-  @Expose()
-  @IsBoolean()
-  isDeleted: boolean;
+  comment?: string;
 }
 
-// 보상 등록 (운영자)
-export class CreateRewardRequestDto {
+// 보상 요청 (유저)
+export class RequestRewardRequestDto {
   @IsString()
-  type: string;
+  userId: string;
 
-  @IsOptional()
-  @IsInt()
-  itemId?: number;
-
-  @IsOptional()
-  @IsInt()
-  value?: number;
-
-  @IsOptional()
-  @IsInt()
-  duration?: number;
-
-  @IsOptional()
   @IsString()
-  description?: string;
+  eventId: string;
+
+  @IsString()
+  rewardId: string;
 }
 
-export class CreateRewardResponseDto {
+export class RequestRewardResponseDto {
   @IsString()
   id: string;
 }
 
-// 전체 보상 목록 (운영자)
-export class GetAllRewardsRequestDto {
+// 내 보상 요청 조회 (유저)
+export class GetMyRewardRequestsRequestDto {
+  @IsString()
+  userId: string;
+}
+
+export class GetMyRewardRequestsResponseDto {
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => RewardRequestDto)
+  requests: RewardRequestDto[];
+}
+
+// 전체 보상 요청 목록 조회 (운영자)
+export class GetAllRewardRequestsRequestDto {
   @IsOptional()
   @IsInt()
   page?: number;
@@ -84,12 +87,11 @@ export class GetAllRewardsRequestDto {
   limit?: number;
 }
 
-// 보상 상세 조회 (운영자)
-export class GetAllRewardsResponseDto {
+export class GetAllRewardRequestsResponseDto {
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => RewardDto)
-  rewards: RewardDto[];
+  @Type(() => RewardRequestDto)
+  requests: RewardRequestDto[];
 
   @IsInt()
   total: number;
@@ -101,56 +103,24 @@ export class GetAllRewardsResponseDto {
   limit: number;
 }
 
-// 보상 상세 조회 (운영자)
-export class GetRewardByIdRequestDto {
+// 보상 요청 단건 조회 (운영자)
+export class GetRewardRequestByIdRequestDto {
   @IsString()
   id: string;
 }
 
-export class GetRewardByIdResponseDto {
+export class GetRewardRequestByIdResponseDto {
   @ValidateNested()
-  @Type(() => RewardDto)
-  reward: RewardDto;
+  @Type(() => RewardRequestDto)
+  request: RewardRequestDto;
 }
 
-// 보상 수정 (운영자)
-export class UpdateRewardRequestDto {
-  @IsString()
-  id: string;
+// 감사 로그 조회 (감사자)
+export class GetRewardAuditLogRequestDto {}
 
-  @IsString()
-  type: string;
-
-  @IsOptional()
-  @IsInt()
-  itemId?: number;
-
-  @IsOptional()
-  @IsInt()
-  value?: number;
-
-  @IsOptional()
-  @IsInt()
-  duration?: number;
-
-  @IsOptional()
-  @IsString()
-  description?: string;
-}
-
-export class UpdateRewardResponseDto {
-  @ValidateNested()
-  @Type(() => RewardDto)
-  reward: RewardDto;
-}
-
-// 보상 삭제 (운영자)
-export class DeleteRewardRequestDto {
-  @IsString()
-  id: string;
-}
-
-export class DeleteRewardResponseDto {
-  @IsBoolean()
-  success: boolean;
+export class GetRewardAuditLogResponseDto {
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => RewardRequestDto)
+  logs: RewardRequestDto[];
 }

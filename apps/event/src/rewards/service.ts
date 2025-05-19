@@ -10,7 +10,7 @@ import {
   RewardDto,
   UpdateRewardRequestDto,
   UpdateRewardResponseDto,
-} from "@/common/dto/requests.dto";
+} from "@/common/dto/rewards.dto";
 import { Injectable } from "@nestjs/common";
 import { Types } from "mongoose";
 import { RewardsRepository } from "./repository";

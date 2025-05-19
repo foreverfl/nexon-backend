@@ -9,7 +9,7 @@ import {
   GetRewardByIdResponseDto,
   UpdateRewardRequestDto,
   UpdateRewardResponseDto,
-} from "@/common/dto/requests.dto";
+} from "@/common/dto/rewards.dto";
 import { LoggingInterceptor } from "@/common/interceptor/logging.interceptor";
 import { RewardsService } from "@/rewards/service";
 import { Controller, UseInterceptors } from "@nestjs/common";

@@ -2,7 +2,7 @@ import {
   CreateRewardRequestDto,
   GetAllRewardsRequestDto,
   UpdateRewardRequestDto,
-} from "@/common/dto/requests.dto";
+} from "@/common/dto/rewards.dto";
 import { Reward, RewardDocument } from "@/common/schema/rewards.schema";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
