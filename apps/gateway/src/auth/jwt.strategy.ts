@@ -1,5 +1,5 @@
 import { GrpcAuthService } from "@/auth/grpc-auth.service";
-import { ValidateResponseDto } from "@/common/dto/auth.dto";
+import { ValidateResponseDto } from "@/auth/auth.dto";
 import { Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";

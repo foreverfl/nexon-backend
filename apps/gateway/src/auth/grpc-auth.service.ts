@@ -7,7 +7,7 @@ import {
   RegisterResponseDto,
   ValidateRequestDto,
   ValidateResponseDto,
-} from "@/common/dto/auth.dto";
+} from "@/auth/auth.dto";
 import { Inject, Injectable, OnModuleInit } from "@nestjs/common";
 import { ClientGrpc } from "@nestjs/microservices";
 import { lastValueFrom, Observable } from "rxjs";
