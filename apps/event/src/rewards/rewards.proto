@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package rewards;
+
+service RewardsService {
+  rpc CreateReward (CreateRewardRequest) returns (CreateRewardResponse);
+  rpc GetAllRewards (GetAllRewardsRequest) returns (GetAllRewardsResponse);
+  rpc GetRewardById (GetRewardByIdRequest) returns (GetRewardByIdResponse);
+  rpc UpdateReward (UpdateRewardRequest) returns (UpdateRewardResponse);
+  rpc DeleteReward (DeleteRewardRequest) returns (DeleteRewardResponse);
+}
+
+// 모델
+message Reward {
+  string id = 1;
+  string type = 2; // ITEM, POINT, MESO, TITLE, EXP
+  int32 itemId = 3;
+  int32 value = 4;
+  int32 duration = 5;
+  string description = 6;
+  bool isDeleted = 7;
+}
+
+// 보상 등록 (운영자)
+message CreateRewardRequest {
+  string type = 1;
+  int32 itemId = 2;
+  int32 value = 3;
+  int32 duration = 4;
+  string description = 5;
+}
+
+message CreateRewardResponse {
+  string id = 1;
+}
+
+// 전체 보상 목록 (운영자)
+message GetAllRewardsRequest {
+  int32 page = 1;
+  int32 limit = 2;
+}
+
+message GetAllRewardsResponse {
+  repeated Reward rewards = 1;
+  int32 total = 2;
+  int32 page = 3;
+  int32 limit = 4;
+}
+
+// 보상 상세 조회 (운영자)
+message GetRewardByIdRequest {
+  string id = 1;
+}
+
+message GetRewardByIdResponse {
+  Reward reward = 1;
+}
+
+// 보상 수정 (운영자)
+message UpdateRewardRequest {
+  string id = 1;
+  string type = 2;
+  int32 itemId = 3;
+  int32 value = 4;
+  int32 duration = 5;
+  string description = 6;
+}
+
+message UpdateRewardResponse {
+  Reward reward = 1;
+}
+
+// 보상 삭제 (운영자)
+message DeleteRewardRequest {
+  string id = 1;
+}
+
+message DeleteRewardResponse {
+  bool success = 1;
+}
