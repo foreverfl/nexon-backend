@@ -1,0 +1,46 @@
+### 회원가입 (사용자)
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "test01@example.com",
+  "password": "1234",
+  "role": "USER"
+}
+
+### 회원가입 (관리자)
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "test02@example.com",
+  "password": "1234",
+  "role": "OPERATOR"
+}
+
+### 회원가입 (운영자)
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "email": "test03@example.com",
+  "password": "1234",
+  "role": "ADMIN"
+}
+
+### 로그인
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "test03@example.com",
+  "password": "1234"
+}
+
+### 토근 갱신 (Refresh Token)
+POST http://localhost:3000/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2ODJjMDVhMTg5ZmMwYTcyNGM1OWVkY2EiLCJpYXQiOjE3NDc3MTU1MjQsImV4cCI6MTc0ODMyMDMyNH0.1JcwfVQBbzGgaAd-OWO_tYyAtU5AdPUNqpPuY3rX514"
+}
