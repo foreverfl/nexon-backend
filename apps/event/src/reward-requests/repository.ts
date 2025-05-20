@@ -44,4 +44,15 @@ export class RewardRequestsRepository {
     const total = await this.model.countDocuments(query);
     return { results, total, page, limit };
   }
+
+  async existsPendingRequest(dto: RequestRewardRequestDto): Promise<boolean> {
+    const exists = await this.model.exists({
+      userId: dto.userId,
+      eventId: dto.eventId,
+      rewardId: dto.rewardId,
+      status: "APPROVED", // PENDING, APPROVED, REJECTED
+      del_yn: false,
+    });
+    return !!exists;
+  }
 }

@@ -9,21 +9,60 @@ import {
   RequestRewardResponseDto,
   RewardRequestDto,
 } from "@/common/dto/requests.dto";
+import { EventsRepository } from "@/events/repository";
+import { RewardsRepository } from "@/rewards/repository";
+import { status } from "@grpc/grpc-js";
 import { Injectable } from "@nestjs/common";
+import { RpcException } from "@nestjs/microservices";
 import { RewardRequestsRepository } from "./repository";
 
 @Injectable()
 export class RewardRequestsService {
   constructor(
     private readonly rewardRequestsRepository: RewardRequestsRepository,
+    private readonly eventsRepository: EventsRepository,
+    private readonly rewardsRepository: RewardsRepository,
   ) {}
 
   async requestReward(
     dto: RequestRewardRequestDto,
   ): Promise<RequestRewardResponseDto> {
-    // TODO: 유효성 검증 로직 구현
+    // ID 유효성 검사
+    // eventId 존재 여부 확인
+    const event = await this.eventsRepository
+      .findById(dto.eventId)
+      .catch(() => null);
+    if (!event) {
+      throw new RpcException({
+        code: status.NOT_FOUND,
+        message: "존재하지 않는 이벤트입니다.",
+      });
+    }
 
-    // TODO: 보상 요청 중복 체크 로직 구현 (redis)
+    // rewardId 존재 여부 확인
+    const reward = await this.rewardsRepository
+      .findById(dto.rewardId)
+      .catch(() => null);
+    if (!reward) {
+      throw new RpcException({
+        code: status.NOT_FOUND,
+        message: "존재하지 않는 보상입니다.",
+      });
+    }
+
+    // userId 존재 여부 확인
+    // TODO: authService.validateUser(dto.userId) 추가 예정
+
+    // 보상 요청 중복 체크
+    const isPending =
+      await this.rewardRequestsRepository.existsPendingRequest(dto);
+
+    if (isPending) {
+      throw new RpcException({
+        code: status.ALREADY_EXISTS,
+        message: "이미 보상을 요청하였습니다.",
+      });
+    }
 
     // 보상 요청
     const request = await this.rewardRequestsRepository.create(dto);
