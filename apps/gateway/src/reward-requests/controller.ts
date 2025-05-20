@@ -20,7 +20,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 @ApiTags("reward-requests")
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Controller("rewards-requests")
+@Controller("reward-requests")
 export class RewardsRequestsController {
   constructor(private readonly rewardsService: RewardRequestsService) {}
 
