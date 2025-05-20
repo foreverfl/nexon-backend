@@ -1,12 +1,12 @@
+import { GrpcRewardsService } from "@/rewards/grpc-rewards.service";
 import {
   CreateRewardRequestDto,
-  GetRewardByIdRequestDto,
-  UpdateRewardRequestDto,
   DeleteRewardRequestDto,
   GetAllRewardsRequestDto,
+  GetRewardByIdRequestDto,
+  UpdateRewardRequestDto,
 } from "@/rewards/rewards.dto";
 import { Injectable } from "@nestjs/common";
-import { GrpcRewardsService } from "./grpc-rewards.service";
 
 @Injectable()
 export class RewardsService {
@@ -24,7 +24,7 @@ export class RewardsService {
     return this.grpcRewardsService.getRewardById(dto);
   }
 
-  updateReward(dto: UpdateRewardRequestDto) {
+  updateReward(dto: UpdateRewardRequestDto & { id: string }) {
     return this.grpcRewardsService.updateReward(dto);
   }
 

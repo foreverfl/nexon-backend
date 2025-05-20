@@ -33,25 +33,30 @@
 
 ```mermaid
 graph TD
+  C[Client: Browser or Postman]
+
   GW[Gateway]
+
   AUTH[Auth Service]
   EVENT[Event Service]
+
   MONGO[MongoDB]
   REDIS[Redis]
 
-  GW -->|인증 관련| AUTH
-  GW -->|이벤트 관련| EVENT
-  AUTH --> MONGO
-  AUTH --> REDIS
-  EVENT --> MONGO
+  C -->|HTTP| GW
+  GW -->|gRPC| AUTH
+  GW -->|gRPC| EVENT
+  AUTH -->|Mongoose| MONGO
+  AUTH -->|Redis Client| REDIS
+  EVENT -->|Mongoose| MONGO
 ```
 
 ## 🧠 아키텍처 설명
 
 - 서비스 간 통신 방식 (gRPC, REST):
-  - Gateway → Auth: gRPC
-  - Gateway → Event: gRPC
-  - Auth → Event: HTTP
+  - Gateway ↔ Auth: gRPC
+  - Gateway ↔ Event: gRPC
+  - Gateway ↔ 외부: HTTP
 - 인증 및 권한 처리 흐름
   - JWT 기반 인증
   - login 시 accessToken 및 refreshToken 발급

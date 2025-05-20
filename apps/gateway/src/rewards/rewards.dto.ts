@@ -116,9 +116,6 @@ export class GetRewardByIdResponseDto {
 // 보상 수정 (운영자)
 export class UpdateRewardRequestDto {
   @IsString()
-  id: string;
-
-  @IsString()
   type: string;
 
   @IsOptional()
