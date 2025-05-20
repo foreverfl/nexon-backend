@@ -1,8 +1,13 @@
 import { Roles } from "@/common/decorator/roles.decorator";
 import { JwtAuthGuard } from "@/common/guard/jwt-auth.guard";
 import { RolesGuard } from "@/common/guard/roles.guard";
+import {
+  CreateRewardRequestDto,
+  UpdateRewardRequestDto,
+} from "@/rewards/rewards.dto";
 import { RewardsService } from "@/rewards/service";
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -20,43 +25,38 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 export class RewardsController {
   constructor(private readonly rewardsService: RewardsService) {}
 
-  // 보상 등록 (운영자)
   @Post()
   @Roles("OPERATOR")
   @ApiOperation({ summary: "보상 등록 (운영자)" })
-  registerReward() {
-    return { message: "보상 등록 (stub)" };
+  registerReward(@Body() dto: CreateRewardRequestDto) {
+    return this.rewardsService.createReward(dto);
   }
 
-  // 전체 보상 목록 (운영자)
   @Get()
   @Roles("OPERATOR")
   @ApiOperation({ summary: "보상 목록 조회 (운영자)" })
   getAllRewards() {
-    return { message: "보상 전체 목록 (stub)" };
+    return this.rewardsService.getAllRewards({});
   }
 
-  // 보상 상세 조회 (운영자)
   @Get(":id")
   @Roles("OPERATOR")
   @ApiOperation({ summary: "보상 상세 조회 (운영자)" })
   getRewardById(@Param("id") id: string) {
-    return { message: `보상 상세 조회 (stub) for ID: ${id}` };
+    return this.rewardsService.getRewardById({ id });
   }
 
-  // 보상 수정 (운영자)
   @Put(":id")
   @Roles("OPERATOR")
   @ApiOperation({ summary: "보상 수정 (운영자)" })
-  updateReward(@Param("id") id: string) {
-    return { message: `보상 수정 (stub) for ID: ${id}` };
+  updateReward(@Param("id") id: string, @Body() dto: UpdateRewardRequestDto) {
+    return this.rewardsService.updateReward({ ...dto, id });
   }
 
-  // 보상 삭제 (운영자)
   @Delete(":id")
   @Roles("OPERATOR")
   @ApiOperation({ summary: "보상 삭제 (운영자)" })
   deleteReward(@Param("id") id: string) {
-    return { message: `보상 삭제 (stub) for ID: ${id}` };
+    return this.rewardsService.deleteReward({ id });
   }
 }
