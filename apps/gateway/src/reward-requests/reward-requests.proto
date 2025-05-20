@@ -7,7 +7,6 @@ service RewardRequestsService {
   rpc GetMyRewardRequests (GetMyRewardRequestsRequest) returns (GetMyRewardRequestsResponse);
   rpc GetAllRewardRequests (GetAllRewardRequestsRequest) returns (GetAllRewardRequestsResponse);
   rpc GetRewardRequestById (GetRewardRequestByIdRequest) returns (GetRewardRequestByIdResponse);
-  rpc GetRewardAuditLog (GetRewardAuditLogRequest) returns (GetRewardAuditLogResponse);
 }
 
 // 모델

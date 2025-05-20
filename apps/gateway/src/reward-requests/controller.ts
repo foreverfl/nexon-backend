@@ -1,7 +1,7 @@
 import { Roles } from "@/common/decorator/roles.decorator";
 import { JwtAuthGuard } from "@/common/guard/jwt-auth.guard";
 import { RolesGuard } from "@/common/guard/roles.guard";
-import { RewardsService as RewardsRequestsService } from "@/rewards/service";
+import { RewardRequestsService } from "@/reward-requests/service";
 import { Controller, Get, Param, Post, UseGuards } from "@nestjs/common";
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 
@@ -10,7 +10,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller("rewards/requests")
 export class RewardsRequestsController {
-  constructor(private readonly rewardsService: RewardsRequestsService) {}
+  constructor(private readonly rewardsService: RewardRequestsService) {}
 
   // 유저 보상 요청 (유저)
   @Post("requests")
